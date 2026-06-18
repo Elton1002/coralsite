@@ -31,4 +31,4 @@ Environment variables for enquiries:
 - `CF_EMAIL_ACCOUNT_ID`
 - `CF_EMAIL_API_TOKEN`
 - `ENQUIRY_FROM_EMAIL`
-- `ENQUIRY_TO_EMAIL` (optional, defaults to `sale@supremebrands.co.zw`)
+- `ENQUIRY_TO_EMAIL` (optional, defaults to `sales@supremebrands.co.zw`)

@@ -1,6 +1,8 @@
 const express = require('express');
 const axios = require('axios');
 const path = require('path');
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
 require('dotenv').config();
 
 const app = express();
@@ -9,13 +11,47 @@ const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
 const CF_EMAIL_ACCOUNT_ID = process.env.CF_EMAIL_ACCOUNT_ID;
 const CF_EMAIL_API_TOKEN = process.env.CF_EMAIL_API_TOKEN;
 const ENQUIRY_FROM_EMAIL = process.env.ENQUIRY_FROM_EMAIL;
-const ENQUIRY_TO_EMAIL = process.env.ENQUIRY_TO_EMAIL || 'sale@supremebrands.co.zw';
+const ENQUIRY_TO_EMAIL = process.env.ENQUIRY_TO_EMAIL || 'sales@supremebrands.co.zw';
+const ALLOWED_CHAT_MODEL = 'claude-sonnet-4-20250514';
+const MAX_CHAT_TOKENS = 800;
+const MAX_CHAT_MESSAGES = 30;
+const MAX_MESSAGE_LENGTH = 2000;
 
 if(!ANTHROPIC_API_KEY){
   console.warn('Warning: ANTHROPIC_API_KEY not set. /api/chat will return a local mock response until a key is configured.');
 }
 
-app.use(express.json({limit:'1mb'}));
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "'unsafe-inline'", "https://unpkg.com"],
+      scriptSrcAttr: ["'unsafe-inline'"],
+      styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+      fontSrc: ["'self'", "https://fonts.gstatic.com"],
+      imgSrc: ["'self'", "data:"],
+      connectSrc: ["'self'"],
+    },
+  },
+}));
+
+const chatLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 15,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'Too many requests. Please try again shortly.' },
+});
+
+const enquiryLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 10,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'Too many enquiries. Please try again later.' },
+});
+
+app.use(express.json({limit:'100kb'}));
 
 function escapeHtml(value) {
   return String(value).replace(/[&<>"']/g, char => ({
@@ -91,65 +127,109 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'coralsoft.html'));
 });
 
-// Serve static files from project root so the website and chatbot run from one server.
-app.use(express.static(path.join(__dirname)));
+const BLOCKED_FILES = [
+  'server.js', 'package.json', 'package-lock.json',
+  'wrangler.toml', '.env.example', '.gitignore',
+  'README-server.md', 'README-cloudflare.md',
+];
 
-app.post('/api/enquiry', async (req, res) => {
+app.use((req, res, next) => {
+  const requestedFile = path.basename(decodeURIComponent(req.path));
+  if (BLOCKED_FILES.includes(requestedFile)) {
+    return res.status(404).end();
+  }
+  next();
+});
+
+app.use(express.static(path.join(__dirname), {
+  dotfiles: 'deny',
+  index: false,
+}));
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const VALID_ENQUIRY_TYPES = ['enquiry', 'product-enquiry', 'contact'];
+
+app.post('/api/enquiry', enquiryLimiter, async (req, res) => {
   const payload = req.body || {};
   if (!payload.name || !payload.email) {
     return res.status(400).json({ error: 'Name and email are required.' });
   }
 
+  const email = String(payload.email).trim();
+  if (!EMAIL_RE.test(email)) {
+    return res.status(400).json({ error: 'Invalid email address.' });
+  }
+
+  const type = String(payload.type || 'enquiry').trim();
+  if (!VALID_ENQUIRY_TYPES.includes(type)) {
+    return res.status(400).json({ error: 'Invalid enquiry type.' });
+  }
+
   try {
     const result = await sendEnquiryEmail({
-      type: String(payload.type || 'enquiry').trim(),
-      name: String(payload.name).trim(),
-      email: String(payload.email).trim(),
-      message: String(payload.message || '').trim(),
-      product: String(payload.product || '').trim(),
-      source: String(payload.source || 'website').trim(),
+      type,
+      name: String(payload.name).trim().slice(0, 200),
+      email: email.slice(0, 254),
+      message: String(payload.message || '').trim().slice(0, 2000),
+      product: String(payload.product || '').trim().slice(0, 200),
+      source: String(payload.source || 'website').trim().slice(0, 50),
     });
 
     if (!result.ok) {
-      return res.status(503).json(result);
+      return res.status(503).json({ error: 'Email service is not available.' });
     }
 
     return res.json({ ok: true });
   } catch (error) {
     console.error('Enquiry email error', error.response?.data || error.message);
-    const status = error.response?.status || 500;
-    return res.status(status).json({
-      error: 'Failed to send enquiry email',
-      details: error.response?.data || error.message,
-    });
+    return res.status(500).json({ error: 'Failed to send enquiry email.' });
   }
 });
 
-app.post('/api/chat', async (req, res) => {
+app.post('/api/chat', chatLimiter, async (req, res) => {
   if(!ANTHROPIC_API_KEY){
-    // Return a lightweight mock response so the frontend can function without a real API key.
-    const userMsgs = (req.body && req.body.messages) || [];
-    const lastUser = userMsgs.length? userMsgs[userMsgs.length-1].content || userMsgs[userMsgs.length-1] : '';
-    const mock = {
-      mock: true,
-      message: `Mock reply: I don't have an API key configured. You asked: "${String(lastUser).slice(0,200)}". This is a demo response.`
-    };
-    return res.json(mock);
+    return res.json({ mock: true, message: 'Chat is running in demo mode.' });
   }
+
+  const userMessages = req.body && req.body.messages;
+  if (!Array.isArray(userMessages) || userMessages.length === 0) {
+    return res.status(400).json({ error: 'Messages array is required.' });
+  }
+
+  if (userMessages.length > MAX_CHAT_MESSAGES) {
+    return res.status(400).json({ error: 'Too many messages in conversation.' });
+  }
+
+  const sanitized = userMessages.map(m => ({
+    role: m.role === 'assistant' ? 'assistant' : 'user',
+    content: String(m.content || '').slice(0, MAX_MESSAGE_LENGTH),
+  }));
+
   try{
-    const resp = await axios.post('https://api.anthropic.com/v1/messages', req.body, {
+    const resp = await axios.post('https://api.anthropic.com/v1/messages', {
+      model: ALLOWED_CHAT_MODEL,
+      max_tokens: MAX_CHAT_TOKENS,
+      system: req.body.system ? String(req.body.system).slice(0, 4000) : undefined,
+      messages: sanitized,
+    }, {
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${ANTHROPIC_API_KEY}`
+        'x-api-key': ANTHROPIC_API_KEY,
+        'anthropic-version': '2023-06-01',
       },
       timeout: 20000
     });
     res.json(resp.data);
   }catch(err){
     console.error('Anthropic proxy error', err.response?.data || err.message);
-    const status = err.response?.status || 500;
-    res.status(status).json({error:'upstream error', details: err.response?.data || err.message});
+    res.status(502).json({ error: 'Chat service temporarily unavailable.' });
   }
+});
+
+app.use((err, req, res, _next) => {
+  console.error('Unhandled error', err.message);
+  const status = err.status || err.statusCode || 500;
+  res.status(status).json({ error: status === 413 ? 'Request too large.' : 'Internal server error.' });
 });
 
 app.listen(PORT, () => {

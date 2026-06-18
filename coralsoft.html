@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CoralSoft — Comfort in Every Sheet</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fraunces:ital,wght@0,700;0,900;1,400;1,700&display=swap" rel="stylesheet">
-<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<script src="https://unpkg.com/lucide@1.18.0/dist/umd/lucide.js"></script>
 <style>
 :root{
   --teal:#0aab8a;--teal2:#07c99e;--purple:#7c3aed;--blue:#2563eb;--navy:#1e3a8a;
@@ -598,7 +598,7 @@ function buildEnquiryMailto(type,name,email,message,product){
     '',
     'Please reply to this enquiry directly.'
   ].filter(Boolean).join('\n');
-  return `mailto:sale@supremebrands.co.zw?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  return `mailto:sales@supremebrands.co.zw?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 }
 
 // ── CHATBOT ──
@@ -741,13 +741,13 @@ function getLocalReply(question){
     return 'We offer many products with different prices. Please ask for a specific product such as Coral Soft Aura (12x4pack) or Coral Soft Sapphire (4x18pack).';
   }
   if(/contact|email|sale@|support|sales/.test(q)){
-    return 'For contact or sales enquiries, please email sale@supremebrands.co.zw.';
+    return 'For contact or sales enquiries, please email sales@supremebrands.co.zw.';
   }
   if(/wholesale|trade|bulk/.test(q)){
-    return 'For wholesale or bulk pricing, please use the contact form or email sale@supremebrands.co.zw so the CoralSoft team can provide the right details.';
+    return 'For wholesale or bulk pricing, please use the contact form or email sales@supremebrands.co.zw so the CoralSoft team can provide the right details.';
   }
   if(/buy|availability|stock|where to buy/.test(q)){
-    return 'CoralSoft products are sold in cases across major retailers and supermarkets in Zimbabwe. Use the contact form or email sale@supremebrands.co.zw for stockist and wholesale details.';
+    return 'CoralSoft products are sold in cases across major retailers and supermarkets in Zimbabwe. Use the contact form or email sales@supremebrands.co.zw for stockist and wholesale details.';
   }
   return 'I can help with CoralSoft product details, packaging, branch locations, and pricing. Ask about a brand like Aura, Classic, Sapphire, or Elegance, or ask where we are located.';
 }
