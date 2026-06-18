@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CoralSoft — Comfort in Every Sheet</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fraunces:ital,wght@0,700;0,900;1,400;1,700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<style>
+:root{
+  --teal:#0aab8a;--teal2:#07c99e;--purple:#7c3aed;--blue:#2563eb;--navy:#1e3a8a;
+  --dark:#080c14;--dark2:#0f1623;--dark3:#151d2e;--dark4:#1c2640;
+  --border:rgba(255,255,255,.1);--text:#e2e8f0;--muted:#64748b;
+}
+*{box-sizing:border-box;margin:0;padding:0;scroll-behavior:smooth;}
+body{font-family:'Inter',sans-serif;background:var(--dark);color:var(--text);}
+.serif{font-family:'Fraunces',serif;}
+
+/* ── NAV ── */
+#nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(8,12,20,.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
+.nav-inner{max-width:1280px;margin:0 auto;padding:0 28px;height:68px;display:flex;align-items:center;justify-content:space-between;}
+.nav-logo{font-size:22px;font-weight:800;color:#fff;text-decoration:none;display:flex;align-items:baseline;gap:0;}
+.nav-links{display:flex;align-items:center;gap:32px;}
+.nav-links a{text-decoration:none;font-size:14px;font-weight:600;color:#94a3b8;transition:color .15s;}
+.nav-links a:hover{color:#fff;}
+.nav-cta{background:var(--teal);color:#fff;text-decoration:none;font-size:13px;font-weight:700;border-radius:8px;padding:9px 20px;transition:opacity .15s;}
+.nav-cta:hover{opacity:.88;}
+#ham{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:6px;}
+#ham span{width:22px;height:2px;background:#94a3b8;display:block;transition:all .25s;}
+#mob-nav{display:none;flex-direction:column;background:var(--dark2);border-top:1px solid var(--border);}
+#mob-nav.open{display:flex!important;}
+#mob-nav a{display:block;padding:14px 28px;font-size:15px;font-weight:600;color:#cbd5e1;text-decoration:none;border-bottom:1px solid var(--border);}
+#mob-nav a:hover{color:#fff;background:rgba(255,255,255,.04);}
+
+/* ── HERO ── */
+.hero{min-height:100vh;display:flex;align-items:center;padding:100px 28px 60px;position:relative;overflow:hidden;background:var(--dark);}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 70% at 60% 40%,rgba(10,171,138,.18) 0%,transparent 70%),radial-gradient(ellipse 50% 50% at 10% 80%,rgba(124,58,237,.12) 0%,transparent 60%);pointer-events:none;}
+.hero-inner{max-width:1280px;margin:0 auto;width:100%;display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;position:relative;z-index:1;}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(10,171,138,.15);border:1px solid rgba(10,171,138,.35);border-radius:999px;padding:6px 16px;font-size:12px;font-weight:700;color:#2dd4bf;margin-bottom:28px;}
+.hero-badge-dot{width:7px;height:7px;background:var(--teal2);border-radius:50%;display:inline-block;}
+.hero-h1{font-size:clamp(48px,5.5vw,76px);font-weight:900;line-height:1.0;color:#fff;letter-spacing:-.03em;margin-bottom:24px;}
+.hero-h1 em{font-style:italic;color:var(--teal2);}
+.hero-sub{font-size:17px;color:#94a3b8;line-height:1.7;max-width:460px;margin-bottom:36px;}
+.hero-btns{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:52px;}
+.btn-primary{background:var(--teal);color:#fff;text-decoration:none;font-weight:700;font-size:14px;border-radius:10px;padding:13px 28px;border:none;cursor:pointer;transition:opacity .15s;font-family:inherit;}
+.btn-primary:hover{opacity:.88;}
+.btn-outline{background:transparent;color:#fff;text-decoration:none;font-weight:700;font-size:14px;border-radius:10px;padding:13px 28px;border:1.5px solid rgba(255,255,255,.2);cursor:pointer;transition:border-color .15s;font-family:inherit;}
+.btn-outline:hover{border-color:rgba(255,255,255,.5);}
+.hero-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--border);border-radius:14px;overflow:hidden;}
+.hstat{padding:20px 16px;text-align:center;border-right:1px solid var(--border);}
+.hstat:last-child{border-right:none;}
+.hstat-n{font-size:28px;font-weight:900;color:#fff;font-family:'Fraunces',serif;}
+.hstat-l{font-size:11px;color:var(--muted);margin-top:4px;}
+
+/* Hero right — product showcase */
+.hero-showcase{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.showcase-card{background:var(--dark3);border:1px solid var(--border);border-radius:16px;padding:18px;text-align:center;transition:border-color .2s,transform .2s;}
+.showcase-card:hover{border-color:var(--teal);transform:translateY(-4px);}
+.showcase-card.offset{margin-top:28px;}
+.showcase-card img{width:100%;aspect-ratio:1;object-fit:contain;}
+.sc-name{font-size:13px;font-weight:700;color:#fff;margin-top:10px;}
+.sc-sub{font-size:11px;font-weight:600;margin-top:2px;}
+
+/* ── TRUST BAR ── */
+.trust{background:var(--dark2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:18px 28px;}
+.trust-inner{max-width:1280px;margin:0 auto;display:flex;flex-wrap:wrap;justify-content:center;gap:16px 40px;}
+.trust-item{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:#94a3b8;}
+
+/* ── SECTION COMMONS ── */
+.section{padding:88px 28px;}
+.section-alt{padding:88px 28px;background:var(--dark2);}
+.container{max-width:1280px;margin:0 auto;}
+.section-label{font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);margin-bottom:12px;}
+.section-h2{font-size:clamp(28px,4vw,44px);font-weight:900;color:#fff;line-height:1.15;margin-bottom:12px;}
+.section-p{font-size:15px;color:#64748b;line-height:1.7;max-width:540px;}
+
+/* ── FILTER TABS ── */
+.tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:36px;}
+.tab{cursor:pointer;padding:8px 20px;border-radius:8px;font-size:13px;font-weight:600;border:1.5px solid var(--border);background:transparent;color:#94a3b8;transition:all .15s;font-family:inherit;}
+.tab.on{background:var(--teal);color:#fff;border-color:var(--teal);}
+.tab:not(.on):hover{border-color:#fff;color:#fff;}
+
+/* ── PRODUCT GRID ── */
+.prod-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;}
+@media(max-width:1100px){.prod-grid{grid-template-columns:repeat(3,1fr);}}
+@media(max-width:760px){.prod-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:480px){.prod-grid{grid-template-columns:1fr;}}
+.pcard{display:none;}
+.pcard.show{display:block;}
+
+.card{background:var(--dark3);border:1.5px solid var(--border);border-radius:16px;padding:18px;display:flex;flex-direction:column;height:100%;transition:border-color .2s,box-shadow .2s;}
+.card:hover{border-color:var(--teal);box-shadow:0 0 0 1px rgba(10,171,138,.2),0 8px 28px rgba(0,0,0,.3);}
+.card-img{background:var(--dark4);border-radius:12px;aspect-ratio:1;display:flex;align-items:center;justify-content:center;margin-bottom:14px;overflow:hidden;}
+.card-img img{width:80%;height:80%;object-fit:contain;}
+.badge{display:inline-block;font-size:11px;font-weight:700;padding:3px 10px;border-radius:6px;margin-bottom:8px;}
+.card h3{font-size:14px;font-weight:700;color:#fff;margin-bottom:5px;}
+.card p{font-size:12px;color:#64748b;line-height:1.5;flex:1;}
+.card-btn{margin-top:14px;width:100%;padding:9px 0;border-radius:8px;border:1.5px solid var(--border);background:transparent;font-size:12px;font-weight:700;cursor:pointer;color:#fff;font-family:inherit;transition:all .15s;}
+.card-btn:hover{background:var(--teal);border-color:var(--teal);}
+
+/* ── ABOUT ── */
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;}
+.about-imgs{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.aimg{background:var(--dark3);border:1px solid var(--border);border-radius:14px;padding:14px;aspect-ratio:1;display:flex;align-items:center;justify-content:center;}
+.aimg img{width:90%;height:90%;object-fit:contain;}
+.aimg.off{margin-top:28px;}
+.stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:36px;}
+.stat{background:var(--dark3);border:1px solid var(--border);border-radius:12px;padding:18px;text-align:center;}
+.stat-n{font-size:26px;font-weight:900;color:var(--teal2);font-family:'Fraunces',serif;}
+.stat-l{font-size:11px;color:var(--muted);margin-top:4px;}
+
+/* ── WHY CARDS ── */
+.why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+@media(max-width:760px){.why-grid{grid-template-columns:1fr 1fr;}}
+@media(max-width:480px){.why-grid{grid-template-columns:1fr;}}
+.why-card{background:var(--dark3);border:1.5px solid var(--border);border-radius:16px;padding:28px;transition:border-color .2s;}
+.why-card:hover{border-color:var(--teal);}
+.why-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:16px;}
+.why-card h3{font-size:15px;font-weight:700;color:#fff;margin-bottom:8px;}
+.why-card p{font-size:13px;color:#64748b;line-height:1.65;}
+
+/* ── TESTIMONIALS ── */
+.test-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+@media(max-width:760px){.test-grid{grid-template-columns:1fr 1fr;}}
+@media(max-width:480px){.test-grid{grid-template-columns:1fr;}}
+.tcard{background:var(--dark3);border:1.5px solid var(--border);border-radius:16px;padding:28px;}
+.stars{color:#fbbf24;font-size:15px;letter-spacing:2px;margin-bottom:14px;}
+.tcard p{font-size:14px;color:#94a3b8;line-height:1.7;margin-bottom:20px;}
+.tcard-name{font-size:14px;font-weight:700;color:#fff;}
+.tcard-sub{font-size:12px;color:var(--muted);margin-top:2px;}
+
+/* ── FAQ ── */
+.faq-list{display:flex;flex-direction:column;gap:10px;max-width:740px;margin:0 auto;}
+.faq-item{background:var(--dark3);border:1.5px solid var(--border);border-radius:14px;overflow:hidden;}
+.faq-btn{width:100%;text-align:left;padding:18px 22px;font-size:14px;font-weight:700;color:#fff;background:transparent;border:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px;font-family:inherit;}
+.faq-btn:hover{color:var(--teal2);}
+.faq-body{display:none;padding:0 22px 18px;font-size:14px;color:#64748b;line-height:1.7;}
+.faq-body.open{display:block;}
+.faq-icon{transition:transform .25s;flex-shrink:0;color:#64748b;}
+.faq-icon.rot{transform:rotate(180deg);}
+
+/* ── CONTACT ── */
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start;}
+.contact-info h2{font-size:clamp(28px,4vw,40px);font-weight:900;color:#fff;margin-bottom:16px;line-height:1.15;}
+.contact-info p{font-size:15px;color:#64748b;line-height:1.7;margin-bottom:36px;}
+.cinfo-row{display:flex;gap:14px;align-items:flex-start;margin-bottom:22px;}
+.cinfo-icon{width:40px;height:40px;background:var(--dark3);border:1px solid var(--border);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.cinfo-label{font-size:13px;font-weight:700;color:#fff;}
+.cinfo-val{font-size:13px;color:#64748b;margin-top:3px;line-height:1.55;}
+.contact-form{background:var(--dark3);border:1.5px solid var(--border);border-radius:20px;padding:36px;}
+.contact-form h3{font-size:18px;font-weight:700;color:#fff;margin-bottom:24px;}
+.finp{width:100%;background:var(--dark4);border:1.5px solid var(--border);border-radius:10px;padding:12px 16px;font-size:14px;color:#fff;outline:none;font-family:inherit;transition:border-color .2s;}
+.finp::placeholder{color:#475569;}
+.finp:focus{border-color:var(--teal);}
+textarea.finp{resize:none;}
+.finp-label{display:block;font-size:11px;font-weight:700;color:#64748b;margin-bottom:6px;text-transform:uppercase;letter-spacing:.07em;}
+.frow{margin-bottom:16px;}
+
+/* ── FOOTER ── */
+footer{background:#050810;border-top:1px solid var(--border);padding:28px;}
+.footer-inner{max-width:1280px;margin:0 auto;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px;}
+.footer-logo{font-size:20px;font-weight:800;color:#fff;}
+.footer-copy{font-size:12px;color:#334155;}
+.footer-tag{font-size:12px;color:#334155;font-style:italic;}
+
+/* ── CHATBOT ── */
+#cb-launcher{position:fixed;bottom:22px;right:22px;z-index:9000;width:54px;height:54px;border-radius:50%;background:var(--teal);color:#fff;border:none;cursor:pointer;box-shadow:0 4px 24px rgba(10,171,138,.5);display:flex;align-items:center;justify-content:center;transition:transform .2s,box-shadow .2s;}
+#cb-launcher:hover{transform:scale(1.08);box-shadow:0 8px 32px rgba(10,171,138,.6);}
+#cb-panel{display:none;flex-direction:column;position:fixed;bottom:86px;right:22px;z-index:9001;width:368px;max-width:calc(100vw - 28px);height:530px;max-height:calc(100vh - 100px);background:var(--dark2);border:1.5px solid var(--border);border-radius:18px;box-shadow:0 24px 64px rgba(0,0,0,.5);overflow:hidden;}
+#cb-panel.open{display:flex!important;}
+#cb-header{background:linear-gradient(135deg,var(--teal),#0dd4a8);padding:14px 18px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0;}
+#cb-msgs{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;background:var(--dark);}
+#cb-chips{display:flex;flex-wrap:wrap;gap:6px;padding:8px 14px 4px;background:var(--dark);flex-shrink:0;border-top:1px solid var(--border);}
+#cb-footer{padding:10px 14px 14px;border-top:1px solid var(--border);background:var(--dark2);flex-shrink:0;display:flex;gap:8px;}
+#cb-input{flex:1;background:var(--dark3);border:1.5px solid var(--border);border-radius:999px;padding:10px 16px;font-size:13px;color:#fff;outline:none;font-family:inherit;transition:border-color .2s;}
+#cb-input::placeholder{color:#475569;}
+#cb-input:focus{border-color:var(--teal);}
+#cb-send{background:var(--teal);color:#fff;border:none;border-radius:999px;padding:10px 18px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:opacity .15s;}
+#cb-send:hover{opacity:.85;}
+@keyframes cbp{0%,100%{opacity:1}50%{opacity:.35}}
+.cbp{animation:cbp 2s infinite;}
+
+/* ── MODAL ── */
+#eq-modal{display:none;position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.7);align-items:center;justify-content:center;padding:20px;}
+#eq-modal.open{display:flex!important;}
+.modal-box{background:var(--dark2);border:1.5px solid var(--border);border-radius:20px;padding:36px;max-width:460px;width:100%;box-shadow:0 32px 80px rgba(0,0,0,.5);}
+.modal-box h3{font-size:22px;font-weight:900;color:#fff;margin-bottom:4px;}
+.modal-box .sub{font-size:13px;color:#64748b;margin-bottom:24px;}
+.minp{width:100%;background:var(--dark3);border:1.5px solid var(--border);border-radius:10px;padding:11px 14px;font-size:14px;color:#fff;outline:none;font-family:inherit;transition:border-color .2s;}
+.minp::placeholder{color:#475569;}
+.minp:focus{border-color:var(--teal);}
+textarea.minp{resize:none;}
+.minp-label{display:block;font-size:11px;font-weight:700;color:#64748b;margin-bottom:6px;text-transform:uppercase;letter-spacing:.07em;}
+.mrow{margin-bottom:14px;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  .hero-inner{grid-template-columns:1fr;}
+  .about-grid{grid-template-columns:1fr;}
+  .contact-grid{grid-template-columns:1fr;}
+}
+@media(max-width:768px){
+  .nav-links{display:none;}
+  #ham{display:flex;}
+  .why-grid{grid-template-columns:1fr 1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- ══ NAV ══ -->
+<nav id="nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">
+      <span class="serif" style="font-style:italic;color:var(--teal2)">Coral</span><span class="serif" style="color:#fff;">Soft</span><sup style="font-size:10px;color:#64748b;font-weight:400;margin-left:1px;">®</sup>
+    </a>
+    <div class="nav-links">
+      <a href="#products">Products</a>
+      <a href="#about">About</a>
+      <a href="#why">Why Us</a>
+      <a href="#faq">FAQ</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <a href="#products" class="nav-cta">Shop Now</a>
+      <button id="ham" onclick="toggleMob()" aria-label="Menu">
+        <span id="hb1"></span><span id="hb2"></span><span id="hb3"></span>
+      </button>
+    </div>
+  </div>
+  <div id="mob-nav">
+    <a href="#products" onclick="closeMob()">Products</a>
+    <a href="#about"    onclick="closeMob()">About</a>
+    <a href="#why"      onclick="closeMob()">Why Us</a>
+    <a href="#faq"      onclick="closeMob()">FAQ</a>
+    <a href="#contact"  onclick="closeMob()">Contact</a>
+  </div>
+</nav>
+
+<!-- ══ HERO ══ -->
+<section class="hero">
+  <div class="hero-inner">
+    <!-- Left -->
+    <div>
+      <div class="hero-badge"><span class="hero-badge-dot"></span> Proudly Made in Zimbabwe</div>
+      <h1 class="hero-h1 serif">
+        Premium<br>tissue.<br><em>Pure comfort.</em>
+      </h1>
+      <p class="hero-sub">Four premium variants crafted for everyday softness — from single rolls to family bulk packs. CoralSoft is the tissue Zimbabwe trusts.</p>
+      <div class="hero-btns">
+        <a href="#products" class="btn-primary">Browse Products</a>
+        <a href="#about" class="btn-outline">Our Story</a>
+      </div>
+      <div class="hero-stats">
+        <div class="hstat"><div class="hstat-n">4</div><div class="hstat-l">Variants</div></div>
+        <div class="hstat"><div class="hstat-n">350</div><div class="hstat-l">Sheets/Roll</div></div>
+        <div class="hstat"><div class="hstat-n">3ply</div><div class="hstat-l">Sapphire</div></div>
+      </div>
+    </div>
+    <!-- Right: staggered product showcase -->
+    <div class="hero-showcase">
+      <div class="showcase-card">
+        <img src="18/elegence toilet-tissue-18x-pack-mockup.png" alt="Elegance">
+        <div class="sc-name">Elegance</div>
+        <div class="sc-sub" style="color:var(--teal2)">18 Rolls · 2ply</div>
+      </div>
+      <div class="showcase-card offset">
+        <img src="18/Sapphire toilet-tissue-18x-pack-mockup.png" alt="Sapphire">
+        <div class="sc-name">Sapphire</div>
+        <div class="sc-sub" style="color:#60a5fa">18 Rolls · 3ply</div>
+      </div>
+      <div class="showcase-card">
+        <img src="18/aura toilet-tissue-18x-pack-mockup.png" alt="Aura">
+        <div class="sc-name">Aura</div>
+        <div class="sc-sub" style="color:#a78bfa">18 Rolls · 2ply</div>
+      </div>
+      <div class="showcase-card offset">
+        <img src="CoralSoft Package mockups/01 Square Paper Napkins Mock-Up.png" alt="Serviettes">
+        <div class="sc-name">Serviettes</div>
+        <div class="sc-sub" style="color:#94a3b8">100 Pack · 1ply</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ TRUST BAR ══ -->
+<div class="trust">
+  <div class="trust-inner">
+    <div class="trust-item"><i data-lucide="shield-check" style="width:15px;height:15px;color:var(--teal2);"></i>Bath-Friendly Formula</div>
+    <div class="trust-item"><i data-lucide="leaf" style="width:15px;height:15px;color:#4ade80;"></i>Environmentally Conscious</div>
+    <div class="trust-item"><i data-lucide="map-pin" style="width:15px;height:15px;color:var(--teal2);"></i>Product of Zimbabwe</div>
+    <div class="trust-item"><i data-lucide="package" style="width:15px;height:15px;color:#fbbf24;"></i>1 to 18 Roll Packs</div>
+    <div class="trust-item"><i data-lucide="star" style="width:15px;height:15px;color:#fbbf24;"></i>Premium 3-ply Available</div>
+  </div>
+</div>
+
+<!-- ══ PRODUCTS ══ -->
+<section class="section" id="products">
+  <div class="container">
+    <div style="margin-bottom:40px;">
+      <div class="section-label">Our Range</div>
+      <h2 class="section-h2 serif">Every home, every need.</h2>
+      <p class="section-p">Four premium variants across multiple pack sizes — from budget Classic to luxurious 3-ply Sapphire.</p>
+    </div>
+    <div class="tabs">
+      <button class="tab on" data-f="all">All Products</button>
+      <button class="tab" data-f="elegance">Elegance</button>
+      <button class="tab" data-f="sapphire">Sapphire</button>
+      <button class="tab" data-f="aura">Aura</button>
+      <button class="tab" data-f="classic">Classic</button>
+      <button class="tab" data-f="pocket">Pocket Tissues</button>
+      <button class="tab" data-f="serviettes">Serviettes</button>
+    </div>
+    <div class="prod-grid">
+
+      <!-- ELEGANCE -->
+      <div class="pcard show" data-cat="elegance"><div class="card"><div class="card-img"><img src="1/elegance Paper Towel Rolls Mockup.png" alt="Elegance 1 Roll"></div><span class="badge" style="background:rgba(16,185,129,.15);color:#34d399;">Elegance</span><h3>1 Roll Pack</h3><p>350 sheets · 2ply softness for everyday use</p><button class="card-btn" onclick="enquire(this)">Enquire</button></div></div>
+      <div class="pcard show" data-cat="elegance"><div class="card"><div class="card-img"><img src="4/elegance coralsoft Toilet Paper Package M ock-Up panda 1 2.png" alt="Elegance 4 Roll"></div><span class="badge" style="background:rgba(16,185,129,.15);color:#34d399;">Elegance</span><h3>4 Roll Pack</h3><p>350 sheets · 2ply — great family value</p><button class="card-btn" onclick="enquire(this)">Enquire</button></div></div>
+      <div class="pcard show" data-cat="elegance"><div class="card"><div class="card-img"><img src="9/CORAL SOFT PAPER Mockup elegance.png" alt="Elegance 9 Roll"></div><span class="badge" style="background:rgba(16,185,129,.15);color:#34d399;">Elegance</span><h3>9 Roll Pack</h3><p>350 sheets · 2ply — stock up and save</p><button class="card-btn" onclick="enquire(this)">Enquire</button></div></div>
+      <div class="pcard show" data-cat="elegance"><div class="card"><div class="card-img"><img src="18/elegence toilet-tissue-18x-pack-mockup.png" alt="Elegance 18 Roll"></div><span class="badge" style="background:rgba(16,185,129,.15);color:#34d399;">Elegance</span><h3>18 Roll Pack</h3><p>350 sheets · 2ply — bulk family pack</p><button class="card-btn" onclick="enquire(this)">Enquire</button></div></div>
+
+      <!-- SAPPHIRE -->
+      <div class="pcard show" data-cat="sapphire"><div class="card"><div class="card-img"><img src="1/sapphire Paper Towel Rolls Mockup.png" alt="Sapphire 1 Roll"></div><span class="badge" style="background:rgba(37,99,235,.2);color:#93c5fd;">Sapphire · 3ply ★</span><h3>1 Roll Pack</h3><p>230 sheets · Ultra-soft 3-ply luxury</p><button class="card-btn" onclick="enquire(this)">Enquire</button></div></div>
+      <div class="pcard show" data-cat="sapphire"><div class="card"><div class="card-img"><img src="4/sapphire coralsoft Toilet Paper Package M ock-Up 35.png" alt="Sapphire 4 Roll"></div><span class="badge" style="background:rgba(37,99,235,.2);color:#93c5fd;">Sapphire · 3ply ★</span><h3>4 Roll Pack</h3><p>230 sheets · 3-ply premium everyday</p><button class="card-btn" onclick="enquire(this)">Enquire</button></div></div>
+      <div class="pcard show" data-cat="sapphire"><div class="card"><div class="card-img"><img src="9/CORAL SOFT PAPER Sapphire Mockup 6.png" alt="Sapphire 9 Roll"></div><span class="badge" style="background:rgba(37,99,235,.2);color:#93c5fd;">Sapphire · 3ply ★</span><h3>9 Roll Pack</h3><p>230 sheets · 3-ply bulk value</p><button class="card-btn" onclick="enquire(this)">Enquire</button></div></div>
+      <div class="pcard show" data-cat="sapphire"><div class="card"><div class="card-img"><img src="18/Sapphire toilet-tissue-18x-pack-mockup.png" alt="Sapphire 18 Roll"></div><span class="badge" style="background:rgba(37,99,235,.2);color:#93c5fd;">Sapphire · 3ply ★</span><h3>18 Roll Pack</h3><p>230 sheets · 3-ply premium bulk</p><button class="card-btn" onclick="enquire(this)">Enquire</button></div></div>
+
+      <!-- AURA -->
+      <div class="pcard show" data-cat="aura"><div class="card"><div class="card-img"><img src="1/aura Paper Towel Rolls Mockup.png" alt="Aura 1 Roll"></div><span class="badge" style="background:rgba(124,58,237,.2);color:#c4b5fd;">Aura</span><h3>1 Roll Pack</h3><p>350 sheets · 2ply luxury purple series</p><button class="card-btn" onclick="enquire(this)">Enquire</button></div></div>
+      <div class="pcard show" data-cat="aura"><div class="card"><div class="card-img"><img src="4/aura coralsoft Toilet Paper Package M ock-Up panda 1.png" alt="Aura 4 Roll"></div><span class="badge" style="background:rgba(124,58,237,.2);color:#c4b5fd;">Aura</span><h3>4 Roll Pack</h3><p>350 sheets · 2ply — great family value</p><button class="card-btn" onclick="enquire(this)">Enquire</button></div></div>
+      <div class="pcard show" data-cat="aura"><div class="card"><div class="card-img"><img src="9/CORAL SOFT PAPER Aura.png" alt="Aura 9 Roll"></div><span class="badge" style="background:rgba(124,58,237,.2);color:#c4b5fd;">Aura</span><h3>9 Roll Pack</h3><p>350 sheets · 2ply — stock up and save</p><button class="card-btn" onclick="enquire(this)">Enquire</button></div></div>
+      <div class="pcard show" data-cat="aura"><div class="card"><div class="card-img"><img src="18/aura toilet-tissue-18x-pack-mockup.png" alt="Aura 18 Roll"></div><span class="badge" style="background:rgba(124,58,237,.2);color:#c4b5fd;">Aura</span><h3>18 Roll Pack</h3><p>350 sheets · 2ply bulk pack</p><button class="card-btn" onclick="enquire(this)">Enquire</button></div></div>
+
+      <!-- CLASSIC -->
+      <div class="pcard show" data-cat="classic"><div class="card"><div class="card-img"><img src="1/classic Paper Towel Rolls Mockup.png" alt="Classic 1 Roll"></div><span class="badge" style="background:rgba(30,58,138,.25);color:#93c5fd;">Classic</span><h3>1 Roll Pack</h3><p>200 sheets · 2ply everyday value</p><button class="card-btn" onclick="enquire(this)">Enquire</button></div></div>
+      <div class="pcard show" data-cat="classic"><div class="card"><div class="card-img"><img src="4/classic coralsoft Toilet Paper Package M ock-Up 3.png" alt="Classic 4 Roll"></div><span class="badge" style="background:rgba(30,58,138,.25);color:#93c5fd;">Classic</span><h3>4 Roll Pack</h3><p>200 sheets · 2ply — household essential</p><button class="card-btn" onclick="enquire(this)">Enquire</button></div></div>
+      <div class="pcard show" data-cat="classic"><div class="card"><div class="card-img"><img src="9/CORAL SOFT PAPER Classic.png" alt="Classic 9 Roll"></div><span class="badge" style="background:rgba(30,58,138,.25);color:#93c5fd;">Classic</span><h3>9 Roll Pack</h3><p>200 sheets · 2ply bulk value</p><button class="card-btn" onclick="enquire(this)">Enquire</button></div></div>
+      <div class="pcard show" data-cat="classic"><div class="card"><div class="card-img"><img src="18/classic toilet-tissue-18x-pack-mockup.png" alt="Classic 18 Roll"></div><span class="badge" style="background:rgba(30,58,138,.25);color:#93c5fd;">Classic</span><h3>18 Roll Pack</h3><p>200 sheets · 2ply — best value bulk</p><button class="card-btn" onclick="enquire(this)">Enquire</button></div></div>
+
+      <!-- POCKET -->
+      <div class="pcard show" data-cat="pocket"><div class="card"><div class="card-img"><img src="PT/03 Pocket Tissue Mockup.png" alt="Pocket Purple"></div><span class="badge" style="background:rgba(124,58,237,.2);color:#c4b5fd;">On-the-Go</span><h3>Pocket Tissue — Purple</h3><p>3ply · 10 tissues · Comfort, Anytime, Anywhere</p><button class="card-btn" onclick="enquire(this)">Enquire</button></div></div>
+      <div class="pcard show" data-cat="pocket"><div class="card"><div class="card-img"><img src="PT/03 Pocket Tissue Mockup 2.png" alt="Pocket Green"></div><span class="badge" style="background:rgba(16,185,129,.15);color:#34d399;">On-the-Go</span><h3>Pocket Tissue — Green</h3><p>3ply · 10 tissues · New Collection design</p><button class="card-btn" onclick="enquire(this)">Enquire</button></div></div>
+
+      <!-- SERVIETTES -->
+      <div class="pcard show" data-cat="serviettes"><div class="card"><div class="card-img"><img src="CoralSoft Package mockups/01 Square Paper Napkins Mock-Up.png" alt="Serviettes Purple"></div><span class="badge" style="background:rgba(124,58,237,.2);color:#c4b5fd;">Serviettes</span><h3>Serviettes — Purple</h3><p>100 pack · 1ply · "Comfort when meals unfold"</p><button class="card-btn" onclick="enquire(this)">Enquire</button></div></div>
+      <div class="pcard show" data-cat="serviettes"><div class="card"><div class="card-img"><img src="CoralSoft Package mockups/002 Square Paper Napkins Mock-Up.png" alt="Serviettes Teal"></div><span class="badge" style="background:rgba(16,185,129,.15);color:#34d399;">Serviettes</span><h3>Serviettes — Teal</h3><p>100 pack · 1ply · Premium softness</p><button class="card-btn" onclick="enquire(this)">Enquire</button></div></div>
+      <div class="pcard show" data-cat="serviettes"><div class="card"><div class="card-img"><img src="CoralSoft Package mockups/003 Square Paper Napkins Mock-Up.png" alt="Serviettes Blue"></div><span class="badge" style="background:rgba(37,99,235,.2);color:#93c5fd;">Serviettes</span><h3>Serviettes — Blue</h3><p>100 pack · 1ply · Classic white finish</p><button class="card-btn" onclick="enquire(this)">Enquire</button></div></div>
+      <div class="pcard show" data-cat="serviettes"><div class="card"><div class="card-img"><img src="CoralSoft Package mockups/1 Square Paper Napkins Mock-Up.png" alt="Serviettes Navy"></div><span class="badge" style="background:rgba(30,58,138,.25);color:#93c5fd;">Serviettes</span><h3>Serviettes — Navy</h3><p>100 pack · 1ply · Premium dining quality</p><button class="card-btn" onclick="enquire(this)">Enquire</button></div></div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══ ABOUT ══ -->
+<section class="section-alt" id="about">
+  <div class="container">
+    <div class="about-grid">
+      <div>
+        <div class="section-label">Our Story</div>
+        <h2 class="section-h2 serif">Made in Zimbabwe.<br><em style="color:var(--teal2);font-style:italic;">Soft for the world.</em></h2>
+        <p style="font-size:15px;color:#64748b;line-height:1.7;margin-bottom:16px;">CoralSoft is made by Supreme Brands (Pvt) Ltd, a tissue manufacturer with operations in Harare, Bulawayo, Masvingo, and Gweru. In Harare, we also operate from two Willowvale offices: Gleneagles Industrial Center Bay 1, 119 Dagenham Road, and 514 Reform Way near Mashwede Village.</p>
+        <p style="font-size:15px;color:#64748b;line-height:1.7;">Our range includes Sapphire, Classic, Aura, Elegance, Premium, Blue Blossom, Pink Blossom, Coral Soft Touch, pocket tissues, kitchen towels, and serviettes — all crafted for local trust, quality, and comfort.</p>
+        <div class="stat-row">
+          <div class="stat"><div class="stat-n">4</div><div class="stat-l">Variants</div></div>
+          <div class="stat"><div class="stat-n">6+</div><div class="stat-l">Pack Sizes</div></div>
+          <div class="stat"><div class="stat-n">ZW</div><div class="stat-l">Made Here</div></div>
+        </div>
+      </div>
+      <div class="about-imgs">
+        <div class="aimg"><img src="18/elegence toilet-tissue-18x-pack-mockup.png" alt="Elegance"></div>
+        <div class="aimg off"><img src="18/Sapphire toilet-tissue-18x-pack-mockup.png" alt="Sapphire"></div>
+        <div class="aimg"><img src="18/aura toilet-tissue-18x-pack-mockup.png" alt="Aura"></div>
+        <div class="aimg off"><img src="PT/03 Pocket Tissue Mockup.png" alt="Pocket"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ WHY US ══ -->
+<section class="section" id="why">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:52px;">
+      <div class="section-label">Why CoralSoft</div>
+      <h2 class="section-h2 serif" style="text-align:center;">The comfort difference.</h2>
+    </div>
+    <div class="why-grid">
+      <div class="why-card"><div class="why-icon" style="background:rgba(16,185,129,.1);"><i data-lucide="layers" style="width:20px;height:20px;color:#34d399;"></i></div><h3>Up to 3-ply Softness</h3><p>Sapphire delivers 3-ply luxury — gentle on skin, strong when needed. The thickest, softest roll in our range.</p></div>
+      <div class="why-card"><div class="why-icon" style="background:rgba(16,185,129,.1);"><i data-lucide="leaf" style="width:20px;height:20px;color:#34d399;"></i></div><h3>Bath-Friendly Formula</h3><p>Septic-safe and plumbing-friendly — peace of mind for every household and building system.</p></div>
+      <div class="why-card"><div class="why-icon" style="background:rgba(251,191,36,.1);"><i data-lucide="package" style="width:20px;height:20px;color:#fbbf24;"></i></div><h3>Every Pack Size</h3><p>Single rolls to 18-pack family bundles — the right size for every household and shopping trip.</p></div>
+      <div class="why-card"><div class="why-icon" style="background:rgba(37,99,235,.15);"><i data-lucide="map-pin" style="width:20px;height:20px;color:#60a5fa;"></i></div><h3>Made in Zimbabwe</h3><p>Proudly local — supporting Zimbabwean manufacturing, creating jobs, keeping quality close to home.</p></div>
+      <div class="why-card"><div class="why-icon" style="background:rgba(124,58,237,.15);"><i data-lucide="heart" style="width:20px;height:20px;color:#a78bfa;"></i></div><h3>4 Curated Variants</h3><p>Classic, Elegance, Aura, and Sapphire — each designed for a specific lifestyle and budget.</p></div>
+      <div class="why-card"><div class="why-icon" style="background:rgba(239,68,68,.12);"><i data-lucide="zap" style="width:20px;height:20px;color:#f87171;"></i></div><h3>On-the-Go Range</h3><p>3-ply pocket tissues for life in motion — compact, soft, always ready when you need them.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ TESTIMONIALS ══ -->
+<section class="section-alt">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:48px;">
+      <h2 class="section-h2 serif" style="text-align:center;">What customers say.</h2>
+    </div>
+    <div class="test-grid">
+      <div class="tcard"><div class="stars">★★★★★</div><p>"The Sapphire 3-ply is incredible — genuinely the softest tissue I've used in Zimbabwe. My family won't go back to anything else."</p><div class="tcard-name">Tendai M.</div><div class="tcard-sub">Harare</div></div>
+      <div class="tcard"><div class="stars">★★★★★</div><p>"We stock Elegance in our guesthouse and guests always ask about it. The 18-roll pack is brilliant value and quality."</p><div class="tcard-name">Rutendo C.</div><div class="tcard-sub">Hospitality, Bulawayo</div></div>
+      <div class="tcard"><div class="stars">★★★★★</div><p>"Love the pocket tissues — carry them everywhere. Glad to support a Zimbabwean brand that delivers on quality."</p><div class="tcard-name">Farai N.</div><div class="tcard-sub">Harare</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FAQ ══ -->
+<section class="section" id="faq">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:48px;">
+      <h2 class="section-h2 serif" style="text-align:center;">Frequently asked questions.</h2>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item"><button class="faq-btn">What is the difference between Classic, Elegance, Aura and Sapphire?<i data-lucide="chevron-down" class="faq-icon" style="width:18px;height:18px;"></i></button><div class="faq-body">Classic offers 200 sheets 2ply — great everyday value. Elegance and Aura both deliver 350 sheets 2ply for premium softness. Sapphire is our flagship 3-ply option with 230 sheets per roll — the thickest and softest tissue in the range.</div></div>
+      <div class="faq-item"><button class="faq-btn">Is CoralSoft safe for septic systems?<i data-lucide="chevron-down" class="faq-icon" style="width:18px;height:18px;"></i></button><div class="faq-body">Yes. All CoralSoft toilet tissue products are formulated to be bath-friendly and safe for standard plumbing and septic systems.</div></div>
+      <div class="faq-item"><button class="faq-btn">Where is CoralSoft manufactured?<i data-lucide="chevron-down" class="faq-icon" style="width:18px;height:18px;"></i></button><div class="faq-body">Proudly made in Zimbabwe by Supreme Brands (Pvt) Ltd, with our manufacturing facility in Harare and branch operations in Bulawayo.</div></div>
+      <div class="faq-item"><button class="faq-btn">Where can I buy CoralSoft products?<i data-lucide="chevron-down" class="faq-icon" style="width:18px;height:18px;"></i></button><div class="faq-body">CoralSoft is available at major retailers and supermarkets across Zimbabwe. Contact us for wholesale enquiries or to find your nearest stockist.</div></div>
+      <div class="faq-item"><button class="faq-btn">Do you offer bulk or trade pricing?<i data-lucide="chevron-down" class="faq-icon" style="width:18px;height:18px;"></i></button><div class="faq-body">Yes — we supply hotels, guesthouses, offices, and retailers. Use the contact form below or reach out directly for wholesale pricing and MOQ details.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CONTACT ══ -->
+<section class="section-alt" id="contact">
+  <div class="container">
+    <div class="contact-grid">
+      <div class="contact-info">
+        <div class="section-label">Get in Touch</div>
+        <h2>Let's talk <em style="color:var(--teal2);font-style:italic;">comfort.</em></h2>
+        <p>For wholesale enquiries, stockist information, or general questions — our team is ready to help.</p>
+        <div class="cinfo-row"><div class="cinfo-icon"><i data-lucide="map-pin" style="width:18px;height:18px;color:var(--teal2);"></i></div><div><div class="cinfo-label">Head Office</div><div class="cinfo-val">Supreme Brands (Pvt) Ltd<br>Industrial Centre, Graniteside, Harare, Zimbabwe</div></div></div>
+        <div class="cinfo-row"><div class="cinfo-icon"><i data-lucide="globe" style="width:18px;height:18px;color:var(--teal2);"></i></div><div><div class="cinfo-label">Website</div><div class="cinfo-val">supremebrands.co.zw</div></div></div>
+        <div class="cinfo-row"><div class="cinfo-icon"><i data-lucide="building-2" style="width:18px;height:18px;color:var(--teal2);"></i></div><div><div class="cinfo-label">Branches</div><div class="cinfo-val">Graniteside, Harare · Belmont, Bulawayo</div></div></div>
+      </div>
+      <div class="contact-form">
+        <h3>Send an Enquiry</h3>
+        <div class="frow"><label class="finp-label">Full Name</label><input id="cf-name" type="text" placeholder="Your name" class="finp"></div>
+        <div class="frow"><label class="finp-label">Email Address</label><input id="cf-email" type="email" placeholder="you@example.com" class="finp"></div>
+        <div class="frow"><label class="finp-label">Message</label><textarea id="cf-msg" rows="4" placeholder="Tell us how we can help..." class="finp"></textarea></div>
+        <button id="cf-btn" onclick="submitContact()" style="width:100%;background:var(--teal);color:#fff;border:none;border-radius:10px;padding:13px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:opacity .15s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">Send Message</button>
+        <div id="cf-status" style="display:none;text-align:center;font-size:14px;font-weight:600;padding:10px 0 0;"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo serif"><span style="font-style:italic;color:var(--teal2)">Coral</span>Soft<sup style="font-size:10px;font-weight:400;color:#334155;">®</sup></div>
+    <div class="footer-copy">© 2025 Supreme Brands (Pvt) Ltd · Product of Zimbabwe · All rights reserved.</div>
+    <div class="footer-tag">"Comfort in every sheet"</div>
+  </div>
+</footer>
+
+<!-- ══ CHATBOT LAUNCHER ══ -->
+<button id="cb-launcher" onclick="document.getElementById('cb-panel').classList.toggle('open')">
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+</button>
+
+<!-- ══ CHATBOT PANEL ══ -->
+<div id="cb-panel">
+  <div id="cb-header">
+    <div>
+      <div style="font-weight:700;font-size:14px;color:#fff;display:flex;align-items:center;gap:8px;">
+        <span class="cbp" style="width:8px;height:8px;background:#86efac;border-radius:50%;display:inline-block;"></span>CoralSoft Assistant
+      </div>
+      <div style="font-size:11px;color:rgba(255,255,255,.75);margin-top:2px;">Ask about products, variants or pricing</div>
+    </div>
+    <button onclick="document.getElementById('cb-panel').classList.remove('open')" style="background:none;border:none;color:#fff;font-size:20px;cursor:pointer;opacity:.75;padding:4px;line-height:1;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=.75">✕</button>
+  </div>
+  <div id="cb-msgs"></div>
+  <div id="cb-chips"></div>
+  <div id="cb-footer">
+    <input id="cb-input" type="text" placeholder="Ask anything about CoralSoft…">
+    <button id="cb-send">Send</button>
+  </div>
+</div>
+
+<!-- ══ ENQUIRY MODAL ══ -->
+<div id="eq-modal">
+  <div class="modal-box">
+    <h3 class="serif">Product Enquiry</h3>
+    <p id="eq-product" class="sub"></p>
+    <div class="mrow"><label class="minp-label">Full Name</label><input id="eq-name" type="text" placeholder="Your name" class="minp"></div>
+    <div class="mrow"><label class="minp-label">Email Address</label><input id="eq-email" type="email" placeholder="you@example.com" class="minp"></div>
+    <div class="mrow"><label class="minp-label">Message (Optional)</label><textarea id="eq-msg" rows="3" placeholder="Any specific questions?" class="minp"></textarea></div>
+    <div style="display:flex;gap:12px;margin-top:4px;">
+      <button onclick="closeModal()" style="flex:1;background:transparent;border:1.5px solid var(--border);border-radius:999px;padding:12px;font-size:14px;font-weight:700;color:#94a3b8;cursor:pointer;font-family:inherit;transition:border-color .15s;" onmouseover="this.style.borderColor='#fff'" onmouseout="this.style.borderColor='rgba(255,255,255,.1)'">Cancel</button>
+      <button onclick="submitEnquiry()" style="flex:1;background:var(--teal);color:#fff;border:none;border-radius:999px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:opacity .15s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">Send Enquiry</button>
+    </div>
+    <div id="eq-status" style="display:none;text-align:center;font-size:14px;font-weight:600;padding:12px 0 0;"></div>
+  </div>
+</div>
+
+<script>
+lucide.createIcons();
+
+// Handle missing images with Coming Soon placeholder
+document.addEventListener('DOMContentLoaded',()=>{
+  document.querySelectorAll('img').forEach(img=>{
+    img.addEventListener('error',()=>{
+      const parent=img.parentElement;
+      parent.innerHTML=`<div style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;background:rgba(10,171,138,.1);border-radius:12px;color:#0aab8a;font-weight:600;font-size:13px;text-align:center;padding:20px;">Coming Soon</div>`;
+    });
+  });
+});
+
+// Nav responsive
+(function(){
+  const dn=document.querySelector('.nav-links');
+  const hm=document.getElementById('ham');
+  function check(){const w=window.innerWidth;dn.style.display=w>=768?'flex':'none';hm.style.display=w>=768?'none':'flex';}
+  check();window.addEventListener('resize',check);
+})();
+
+function toggleMob(){
+  const m=document.getElementById('mob-nav');
+  const open=m.classList.toggle('open');
+  document.getElementById('hb1').style.transform=open?'translateY(7px) rotate(45deg)':'';
+  document.getElementById('hb2').style.opacity=open?'0':'1';
+  document.getElementById('hb3').style.transform=open?'translateY(-7px) rotate(-45deg)':'';
+}
+function closeMob(){
+  document.getElementById('mob-nav').classList.remove('open');
+  ['hb1','hb2','hb3'].forEach(id=>{const e=document.getElementById(id);e.style.transform='';e.style.opacity='1';});
+}
+
+// Product filter
+document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('on'));
+  t.classList.add('on');
+  const f=t.dataset.f;
+  document.querySelectorAll('.pcard').forEach(c=>{
+    c.style.display=(f==='all'||c.dataset.cat===f)?'block':'none';
+  });
+}));
+
+// FAQ
+document.querySelectorAll('.faq-btn').forEach(btn=>btn.addEventListener('click',()=>{
+  const body=btn.nextElementSibling,icon=btn.querySelector('.faq-icon');
+  const was=body.classList.contains('open');
+  document.querySelectorAll('.faq-body').forEach(b=>b.classList.remove('open'));
+  document.querySelectorAll('.faq-icon').forEach(i=>i.classList.remove('rot'));
+  if(!was){body.classList.add('open');icon.classList.add('rot');}
+}));
+
+// Modal
+function enquire(btn){
+  const card=btn.closest('[data-cat]');
+  document.getElementById('eq-product').textContent='Product: '+card.querySelector('.badge').textContent+' — '+card.querySelector('h3').textContent;
+  document.getElementById('eq-status').style.display='none';
+  ['eq-name','eq-email','eq-msg'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('eq-modal').classList.add('open');
+}
+function closeModal(){document.getElementById('eq-modal').classList.remove('open');}
+document.getElementById('eq-modal').addEventListener('click',e=>{if(e.target===e.currentTarget)closeModal();});
+function submitEnquiry(){
+  const n=document.getElementById('eq-name').value.trim(),e=document.getElementById('eq-email').value.trim(),m=document.getElementById('eq-msg').value.trim(),p=document.getElementById('eq-product').textContent.replace(/^Product:\s*/,'').trim();
+  if(!n||!e){showSt('eq-status','Please fill in your name and email.','#f87171');return;}
+  const btn=document.querySelector('#eq-modal button[onclick="submitEnquiry()"]');
+  if(btn){btn.disabled=true;btn.textContent='Sending…';}
+  fetch('/api/enquiry',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({type:'product-enquiry',name:n,email:e,message:m,product:p,source:'website'})})
+    .then(async r=>{const data=await r.json().catch(()=>({})); if(!r.ok) throw new Error(data.error||data.details||'Failed to send enquiry'); return data;})
+    .then(()=>{showSt('eq-status','✓ Enquiry sent! We\'ll be in touch shortly.',var_teal);setTimeout(closeModal,2200);})
+    .catch(()=>{window.location.href=buildEnquiryMailto('product-enquiry',n,e,m,p);showSt('eq-status','Opening your email client with the enquiry details.','#fbbf24');setTimeout(closeModal,2200);})
+    .finally(()=>{if(btn){btn.disabled=false;btn.textContent='Send Enquiry';}});
+}
+
+// Contact form
+function submitContact(){
+  const n=document.getElementById('cf-name').value.trim(),e=document.getElementById('cf-email').value.trim(),m=document.getElementById('cf-msg').value.trim();
+  if(!n||!e||!m){showSt('cf-status','Please fill in all fields.','#f87171');return;}
+  const btn=document.getElementById('cf-btn');btn.disabled=true;btn.textContent='Sending…';
+  fetch('/api/enquiry',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({type:'contact',name:n,email:e,message:m,source:'website'})})
+    .then(async r=>{const data=await r.json().catch(()=>({})); if(!r.ok) throw new Error(data.error||data.details||'Failed to send message'); return data;})
+    .then(()=>{
+      showSt('cf-status','✓ Message sent! We\'ll get back to you soon.',var_teal);
+      ['cf-name','cf-email','cf-msg'].forEach(id=>document.getElementById(id).value='');
+    })
+    .catch(()=>{window.location.href=buildEnquiryMailto('contact',n,e,m,'');showSt('cf-status','Opening your email client with the message details.','#fbbf24');['cf-name','cf-email','cf-msg'].forEach(id=>document.getElementById(id).value='');})
+    .finally(()=>{btn.disabled=false;btn.textContent='Send Message';});
+}
+const var_teal='#2dd4bf';
+function showSt(id,msg,color){const el=document.getElementById(id);el.textContent=msg;el.style.color=color;el.style.display='block';}
+
+function buildEnquiryMailto(type,name,email,message,product){
+  const subject=`CoralSoft ${type==='contact'?'contact':'enquiry'}${product?`: ${product}`:''}`;
+  const body=[
+    `Name: ${name}`,
+    `Email: ${email}`,
+    product?`Product: ${product}`:'',
+    message?`Message: ${message}`:'',
+    '',
+    'Please reply to this enquiry directly.'
+  ].filter(Boolean).join('\n');
+  return `mailto:sale@supremebrands.co.zw?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+}
+
+// ── CHATBOT ──
+const SYS=`You are the friendly assistant for CoralSoft, a premium tissue brand by Supreme Brands (Pvt) Ltd in Zimbabwe.
+Supreme Brands manufactures tissues in Harare, Bulawayo, Masvingo, and Gweru.
+Harare offices are at Gleneagles Industrial Center Bay 1, 119 Dagenham Road, Willowvale, and 514 Reform Way, Willowvale near Mashwede Village.
+Products: Sapphire, Classic, Aura, Elegance, Blue Blossom, Pink Blossom, Premium, Coral Soft Touch, Pocket Tissues, Kitchen Towels, Serviettes.
+Pack sizes:
+- Aura and Classic: 4-pack, 9-pack, 18-pack, 50-pack.
+- Sapphire: 4-pack, 18-pack.
+- Blossoms (Blue Blossom, Pink Blossom): 4-pack, 9-pack.
+- Serviettes: 100 sheets, 1000 sheets.
+Ply details:
+- Aura, Premium, Pink Blossom, Classic, Kitchen Towels: 2ply.
+- Blue Blossom, Coral Soft Touch: 1ply.
+- Pocket Tissues: 3ply.
+Case formats:
+- Aura, Classic: 12x4, 8x9, 4x18, 1x50.
+- Premium: 12x4, 8x9, 1x50.
+- Blue Blossom: 15x4, 8x9, 1x50.
+- Pink Blossom: 12x4, 8x9, 1x50.
+- Coral Soft Touch: 1x50.
+Use the user-provided information for answers and avoid inventing additional product or packaging details beyond what is given.
+Be warm and concise (2-3 sentences). If the user asks about wholesale, point them to the contact form.`;
+
+const msgs=[];
+const msgsEl=document.getElementById('cb-msgs');
+const inpEl=document.getElementById('cb-input');
+
+function addMsg(role,text){
+  const row=document.createElement('div');
+  row.style.cssText=`display:flex;justify-content:${role==='user'?'flex-end':'flex-start'};`;
+  const bub=document.createElement('div');
+  bub.style.cssText=role==='user'
+    ?'background:var(--teal);color:#fff;border-radius:16px 16px 4px 16px;padding:10px 14px;max-width:82%;font-size:13px;line-height:1.55;word-break:break-word;'
+    :'background:var(--dark3);border:1px solid var(--border);border-radius:16px 16px 16px 4px;padding:10px 14px;max-width:82%;font-size:13px;line-height:1.55;color:#e2e8f0;word-break:break-word;';
+  bub.textContent=text;row.appendChild(bub);msgsEl.appendChild(row);
+  msgsEl.scrollTop=msgsEl.scrollHeight;
+}
+
+const localData = {
+  businessInfo: {
+    mainArea: 'Willovale',
+    branches: [
+      {name:'Gleneagle Industrial Site Branch', address:'119 Dagenham Road, Bay 1, opposite Willovale Motors'},
+      {name:'Reform Way Branch', address:'514 Reform Way, near Mashwede Village'}
+    ],
+    otherCities:['Bulawayo','Mutare','Gweru','Masvingo']
+  },
+  packagingInfo: {
+    note:'All products are sold in cases.',
+    packs:{
+      '1_roll':'Sold as a 50 pack (1 roll x 50 units)',
+      '4_pack':'Sold as 12 packs of 4 rolls (4 x 12 = 48 rolls per case)',
+      '9_pack':'Sold as 8 packs of 9 rolls (9 x 8 = 72 rolls per case)',
+      '18_pack':'Sold as 4 packs of 18 rolls (18 x 4 = 72 rolls per case)',
+      '50_pack':'Single roll packs bundled into a case of 50'
+    }
+  },
+  brands:{
+    Aura:{description:'Coral Soft Aura is a premium soft and strong toilet paper option designed for comfort and durability.', availablePacks:['4 pack','9 pack','18 pack','50 pack']},
+    Classic:{description:'Coral Soft Classic is an affordable and reliable everyday toilet paper option.', availablePacks:['4 pack','9 pack','18 pack','50 pack']},
+    Sapphire:{description:'Coral Soft Sapphire is a high-quality 3-ply toilet paper offering extra softness and strength.', availablePacks:['4 pack','18 pack','50 pack']},
+    Elegance:{description:'Coral Soft Elegance focuses on value and efficiency, typically available in bulk options.', availablePacks:['4 pack','9 pack','18 pack','50 pack']}
+  },
+  products:[
+    {name:'Coral Soft Aura (12x4pack) 2Ply-350 Sheets', price:'$2.50'},
+    {name:'Coral Soft Aura (8x9pack) 2Ply-350 Sheets', price:'$4.50'},
+    {name:'Coral Soft Aura (4x18pack) 2Ply-350 Sheets', price:'$8.00'},
+    {name:'Coral Soft Aura (50x1pack) 2Ply-350 Sheets', price:'$21.00'},
+    {name:'Coral Soft Aura (1x50pack) 2Ply-350 Sheets', price:'$20.00'},
+    {name:'Unbranded (50x1pack) 2Ply-350 Sheets', price:'$20.00'},
+    {name:'Coral Soft Classic (12x4pack) 2Ply-200 Sheets', price:'$1.50'},
+    {name:'Coral Soft Classic (4x18pack) 2Ply-200 Sheets', price:'$6.00'},
+    {name:'Coral Soft Classic (8x9pack) 2PLY-200Sheets', price:'$2.63'},
+    {name:'Coral Soft Classic (50x1pack) 2PLY-200Sheets', price:'$14.00'},
+    {name:'Coral Soft Premium (12x4pack) 2Ply-350 Sheets', price:'$2.00'},
+    {name:'Coral Soft Premium (9x8pack) 2PLY-350 Sheets', price:'$4.00'},
+    {name:'Coral Soft Premium (50x1pack) 2PLY-350Sheets', price:'$22.29'},
+    {name:'Soft Touch Pink Blossom (12x4pack) 2Ply-250 Sheets', price:'$1.50'},
+    {name:'Coral Soft Sapphire (12x4pack) 3Ply-230 Sheets', price:'$3.00'},
+    {name:'Coral Soft Sapphire (4x18pack) 3Ply-230 Sheets', price:'$9.00'},
+    {name:'Coral Soft Sapphire (50x1pack) 3PLY-230Sheets', price:'$23.00'},
+    {name:'Coral Soft Value (8x9pack) 1Ply-350 Sheets', price:'$2.38'},
+    {name:'Soft Touch Blue Blossom (15x4pack) 1Ply-270 Sheets', price:'$1.00'},
+    {name:'Soft Touch Blue Blossom (8x9pack) 1Ply-270 Sheets', price:'$2.00'},
+    {name:'Soft Touch Pink Blossom (15x4pack) 2Ply-250 Sheets', price:'$1.50'},
+    {name:'Soft Touch Pink Blossom (8x9pack) 2Ply-250 Sheets', price:'$3.00'},
+    {name:'Coral Soft Value (15x4) 1Ply-350 Sheets', price:'$1.25'},
+    {name:'Coral Soft Aura B Grade (1x50pack) 2Ply-350 Sheets', price:'$15.00'},
+    {name:'Coral Soft Classic B Grade (1x50pack) 2Ply-200 Sheets', price:'$8.00'},
+    {name:'Coral Soft Sapphire B Grade (1x50pack) 3Ply-230 Sheets', price:'$18.00'},
+    {name:'Tissue Off Cuts 3Kg', price:'$2.00'},
+    {name:'Coral Soft (12x2 Pack) Kitchen Towels', price:'$2.00'},
+    {name:'Coral Soft (6x4 Pack) Kitchen Towels', price:'$4.00'},
+    {name:'Coral Soft Jumbo (6x2 Pack) Kitchen Towels', price:'$5.00'},
+    {name:'Coral Soft Plain Serviettes (12x1 Pack)', price:'$1.00'},
+    {name:'Coral Soft Plain Serviettes (6x1 Pack)', price:'$2.00'},
+    {name:'Coral Soft Plain Serviettes (1x1 Pack)', price:'$7.00'}
+  ],
+  intents:[
+    {question:'where are you located', answer:'We are located in Willovale with two branches: 119 Dagenham Road (opposite Willovale Motors) and 514 Reform Way near Mashwede Village. We also have branches in Bulawayo, Mutare, Gweru, and Masvingo.'},
+    {question:'what is aura', answer:'Aura is a premium Coral Soft toilet paper brand designed for softness and strength. It comes in 4 packs, 9 packs, 18 packs, and 50 pack cases.'},
+    {question:'what is sapphire', answer:'Sapphire is a high-quality 3-ply toilet paper offering extra softness and strength. Available in 4 packs, 18 packs, and 50 pack cases.'},
+    {question:'what is classic', answer:'Classic is an affordable and reliable everyday toilet paper. It comes in 4 packs, 9 packs, 18 packs, and 50 pack cases.'},
+    {question:'what is elegance', answer:'Elegance is a value-focused toilet paper brand available mainly in larger pack sizes like 4 packs, 9 packs, 18 packs, and 50 packs.'},
+    {question:'how are your products sold', answer:'All our products are sold in cases. For example: 50 pack means 1 roll x 50, 4 pack is 4 x 12 packs, 9 pack is 9 x 8 packs, and 18 pack is 18 x 4 packs per case.'}
+  ]
+};
+
+function normalizeText(text){return text.toLowerCase().replace(/[?\.!,]/g,'');}
+function formatArray(arr){return arr.join(', ').replace(/, ([^,]*)$/, ' and $1');}
+function getLocalReply(question){
+  const q = normalizeText(question);
+  const exact = localData.intents.find(i=>q.includes(normalizeText(i.question)));
+  if(exact){
+    return exact.answer;
+  }
+  if(/(what|which).*(products|offer|sell)|products|offer|sell/.test(q)){
+    return 'We offer Coral Soft tissue brands and serviettes, including Elegance, Sapphire, Classic, Aura, and Serviettes.';
+  }
+  if(/location|located|where|branch|address/.test(q)){
+    return `We are based in Willovale with two main branches: ${localData.businessInfo.branches.map(b=>`${b.name} at ${b.address}`).join(' and ')}. We also serve Bulawayo, Mutare, Gweru, and Masvingo.`;
+  }
+  if(/pack|case|sold|packs|case of/.test(q)){
+    const packs = localData.packagingInfo.packs;
+    return `${localData.packagingInfo.note} For example, 1_roll is ${packs['1_roll']}; 4_pack is ${packs['4_pack']}; 9_pack is ${packs['9_pack']}; 18_pack is ${packs['18_pack']}; 50_pack is ${packs['50_pack']}.`;
+  }
+  for(const brand of Object.keys(localData.brands)){
+    if(q.includes(brand.toLowerCase())){
+      const info = localData.brands[brand];
+      return `${brand}: ${info.description} It is available in ${formatArray(info.availablePacks)}.`;
+    }
+  }
+  if(/price|cost|how much/.test(q)){
+    const matches = localData.products.filter(p=>q.includes(normalizeText(p.name)));
+    if(matches.length){
+      return matches.map(p=>`${p.name} costs ${p.price}.`).join(' ');
+    }
+    return 'We offer many products with different prices. Please ask for a specific product such as Coral Soft Aura (12x4pack) or Coral Soft Sapphire (4x18pack).';
+  }
+  if(/contact|email|sale@|support|sales/.test(q)){
+    return 'For contact or sales enquiries, please email sale@supremebrands.co.zw.';
+  }
+  if(/wholesale|trade|bulk/.test(q)){
+    return 'For wholesale or bulk pricing, please use the contact form or email sale@supremebrands.co.zw so the CoralSoft team can provide the right details.';
+  }
+  if(/buy|availability|stock|where to buy/.test(q)){
+    return 'CoralSoft products are sold in cases across major retailers and supermarkets in Zimbabwe. Use the contact form or email sale@supremebrands.co.zw for stockist and wholesale details.';
+  }
+  return 'I can help with CoralSoft product details, packaging, branch locations, and pricing. Ask about a brand like Aura, Classic, Sapphire, or Elegance, or ask where we are located.';
+}
+
+addMsg('assistant',"Hi! I'm the CoralSoft assistant 👋 Ask me about products, variants, pricing, or our locations. How can I help?");
+
+['Where are you located?','What is Aura?','What is Sapphire?','How are products packed?'].forEach(s=>{
+  const c=document.createElement('button');c.textContent=s;
+  c.style.cssText='font-size:11px;border:1px solid rgba(10,171,138,.4);color:#2dd4bf;border-radius:999px;padding:5px 12px;background:rgba(10,171,138,.08);cursor:pointer;font-family:inherit;white-space:nowrap;font-weight:600;';
+  c.onclick=()=>{inpEl.value=s;sendMsg();document.getElementById('cb-chips').style.display='none';};
+  document.getElementById('cb-chips').appendChild(c);
+});
+
+async function sendMsg(){
+  const text=inpEl.value.trim();if(!text)return;
+  inpEl.value='';addMsg('user',text);msgs.push({role:'user',content:text});
+  const ld=document.createElement('div');ld.style.cssText='display:flex;justify-content:flex-start;';
+  ld.innerHTML='<div style="background:var(--dark3);border:1px solid var(--border);border-radius:16px 16px 16px 4px;padding:10px 14px;font-size:13px;color:#475569;">typing…</div>';
+  msgsEl.appendChild(ld);msgsEl.scrollTop=msgsEl.scrollHeight;
+    try{
+    // POST to local proxy to keep API key server-side
+    const res=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:800,system:SYS,messages:msgs})});
+    const data=await res.json();
+    console.log('chat proxy response',data);
+    let reply = "Sorry, couldn't get a response. Please try again.";
+    if(data){
+      if(data.mock){
+        reply = getLocalReply(text);
+      }else if(Array.isArray(data.content)){
+        reply = data.content.find(b=>b.type==='text')?.text || data.content.map(c=>c.text||'').filter(Boolean).join('\n') || reply;
+      }else if(typeof data.content==='object' && data.content!==null){
+        reply = data.content.text || reply;
+      }else if(typeof data.completion==='string'){
+        reply = data.completion;
+      }else if(typeof data.message==='string'){
+        reply = data.message;
+      }else if(typeof data.text==='string'){
+        reply = data.text;
+      }
+    }
+    ld.remove();addMsg('assistant',reply);msgs.push({role:'assistant',content:reply});
+  }catch(e){
+    console.error('chat error',e);
+    ld.remove();addMsg('assistant',"Having trouble connecting. Please try again or use our contact form.");
+  }
+}
+document.getElementById('cb-send').onclick=sendMsg;
+inpEl.addEventListener('keydown',e=>{if(e.key==='Enter')sendMsg();});
+</script>
+</body>
+</html>

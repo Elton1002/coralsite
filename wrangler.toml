@@ -1,0 +1,6 @@
+name = "coralsoft-pages"
+compatibility_date = "2026-06-10"
+
+[site]
+  bucket = "."
+  entry-point = "functions"
