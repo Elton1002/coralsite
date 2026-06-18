@@ -26,6 +26,7 @@ app.use(helmet({
     directives: {
       defaultSrc: ["'self'"],
       scriptSrc: ["'self'", "'unsafe-inline'", "https://unpkg.com"],
+      scriptSrcAttr: ["'unsafe-inline'"],
       styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
       fontSrc: ["'self'", "https://fonts.gstatic.com"],
       imgSrc: ["'self'", "data:"],
@@ -223,6 +224,12 @@ app.post('/api/chat', chatLimiter, async (req, res) => {
     console.error('Anthropic proxy error', err.response?.data || err.message);
     res.status(502).json({ error: 'Chat service temporarily unavailable.' });
   }
+});
+
+app.use((err, req, res, _next) => {
+  console.error('Unhandled error', err.message);
+  const status = err.status || err.statusCode || 500;
+  res.status(status).json({ error: status === 413 ? 'Request too large.' : 'Internal server error.' });
 });
 
 app.listen(PORT, () => {
